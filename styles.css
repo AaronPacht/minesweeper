@@ -1,0 +1,20 @@
+#square {
+    height: 50px;
+    width: 50px;
+    background-color: #555;
+  }
+
+input{
+  width: 75px;
+}
+  
+button{
+    height: 50px;
+    width: 50px;
+  }
+  
+#grid{
+width: min-content;
+    display: grid;
+    grid-template-columns: "";
+};
