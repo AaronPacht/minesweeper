@@ -24,11 +24,13 @@ document.addEventListener('DOMContentLoaded',(e)=>{
     num1 = input1.value;
   } else {
     num1 = 10;
+    input1.value = 10;
   };
   if (input2.value>10) {
     num2 = input2.value;
   } else {
     num2 = 10;
+    input2.value = 10;
   };
   
   let autos = ""
@@ -52,32 +54,44 @@ document.addEventListener('DOMContentLoaded',(e)=>{
   for (let i = 0; i < buttons.length; i++) {
     buttons[i].addEventListener('click',()=>{
       if (newGame) {
-        let mineNumber;
-        while (mineNumber!=0) {
-          minesLeft = setMines(i);
-          mineNumber = 0;
-          let surrounding = surround(i,num1);
-          surrounding.forEach(tile=>{
-            if (minesLeft.includes(tile)) {
-              mineNumber+=1;
-            }
-          });
-        }
-        minesLeft.forEach(e=>{
-          e.style.backgroundColor='red'
-        })
-        newGame = false;
-      } else {
-      let mineNumber = 0;
-      let surrounding = surround(i,num1);
-      surrounding.forEach(tile=>{
-        if (minesLeft.includes(tile)) {
-          mineNumber+=1;
-        }
-      });
-      buttons[i].textContent = mineNumber;
-    };
+        getMines(i,num1);
+      } else if(buttons[i].disabled === false){
+        getNumber(i);
+      };
     });
+  };
+
+  function getNumber(i){
+    buttons[i].disabled = true;
+    let mineNumber = 0;
+    let surrounding = surround(i,num1);
+    surrounding.forEach(tile=>{
+      if (minesLeft.includes(tile)) {
+        mineNumber+=1;
+      }
+    });
+    if (mineNumber!=0) {
+      buttons[i].textContent = mineNumber;
+    }
+  };
+
+  function getMines (i,num1) {
+      buttons[i].disabled = true;
+      let mineNumber;
+      while (mineNumber!=0) {
+        minesLeft = setMines(i);
+        mineNumber = 0;
+        let surrounding = surround(i,num1);
+        surrounding.forEach(tile=>{
+          if (minesLeft.includes(tile)) {
+            mineNumber+=1;
+          }
+        });
+      }
+      newGame = false;
+      minesLeft.forEach(e=>{
+        e.style.backgroundColor='red'
+      })
   };
 
   function setMines (cur) {
