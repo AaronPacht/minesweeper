@@ -52,9 +52,22 @@ document.addEventListener('DOMContentLoaded',(e)=>{
   for (let i = 0; i < buttons.length; i++) {
     buttons[i].addEventListener('click',()=>{
       if (newGame) {
-        minesLeft = setMines(i);
+        let mineNumber;
+        while (mineNumber!=0) {
+          minesLeft = setMines(i);
+          mineNumber = 0;
+          let surrounding = surround(i,num1);
+          surrounding.forEach(tile=>{
+            if (minesLeft.includes(tile)) {
+              mineNumber+=1;
+            }
+          });
+        }
+        minesLeft.forEach(e=>{
+          e.style.backgroundColor='red'
+        })
         newGame = false;
-      }
+      } else {
       let mineNumber = 0;
       let surrounding = surround(i,num1);
       surrounding.forEach(tile=>{
@@ -63,7 +76,7 @@ document.addEventListener('DOMContentLoaded',(e)=>{
         }
       });
       buttons[i].textContent = mineNumber;
-      
+    };
     });
   };
 
@@ -75,7 +88,6 @@ document.addEventListener('DOMContentLoaded',(e)=>{
       if (i!=cur) {
         if (Math.floor(Math.random() * tileTotal) + 1 <= mineCount) {
           mineList.push(buttons[i]);
-          buttons[i].style.backgroundColor = "red";
           mineCount-=1;
           tileTotal-=1;        
         } else {
