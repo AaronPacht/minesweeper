@@ -56,23 +56,37 @@ document.addEventListener('DOMContentLoaded',(e)=>{
       if (newGame) {
         getMines(i,num1);
       } else if(buttons[i].disabled === false){
-        getNumber(i);
-      };
+        let next = getNumber(i);
+        if(next){
+          for (let index = 0; index < next.length; index++) {
+            let more = getNumber(next[index]);
+            if (more) {
+              more.forEach(e=>{
+                if (!next.includes(e)) {
+                  next.push(e);
+                }
+              });
+            }
+          };
+        };
+        };
     });
   };
 
   function getNumber(i){
     buttons[i].disabled = true;
     let mineNumber = 0;
-    let surrounding = surround(i,num1);
+    let [surrounding,surroundingIndexes] = surround(i,num1);
     surrounding.forEach(tile=>{
       if (minesLeft.includes(tile)) {
         mineNumber+=1;
       }
     });
-    if (mineNumber!=0) {
+    if (mineNumber === 0) {
+      return surroundingIndexes;
+    } else {
       buttons[i].textContent = mineNumber;
-    }
+    };
   };
 
   function getMines (i,num1) {
@@ -114,36 +128,45 @@ document.addEventListener('DOMContentLoaded',(e)=>{
 
   function surround (clk,row) {
     let surroundList = [];
+    let surroundListIndexes = [];
 
     if (buttons[clk-1] && Number(buttons[clk-1].className)===Number(buttons[clk].className)) {
-      surroundList.push(buttons[clk-1])
+      surroundList.push(buttons[clk-1]);
+      surroundListIndexes.push(clk-1);
     }
 
     if (buttons[clk+1] && Number(buttons[clk+1].className)===Number(buttons[clk].className)) {
-      surroundList.push(buttons[clk+1])
+      surroundList.push(buttons[clk+1]);
+      surroundListIndexes.push(clk+1);
     }
 
     if (buttons[clk-row]) {
-      surroundList.push(buttons[clk-row])
+      surroundList.push(buttons[clk-row]);
+      surroundListIndexes.push(clk-row);
       if (buttons[clk-row-1] && Number(buttons[clk-row-1].className)===Number(buttons[clk].className)-1) {
-        surroundList.push(buttons[clk-row-1])
+        surroundList.push(buttons[clk-row-1]);
+        surroundListIndexes.push(clk-row-1);
       }
       if (buttons[clk-row+1] && Number(buttons[clk-row+1].className)===Number(buttons[clk].className)-1) {
-        surroundList.push(buttons[clk-row+1])
+        surroundList.push(buttons[clk-row+1]);
+        surroundListIndexes.push(clk-row+1);
       }
     }
 
     if (buttons[clk+row]) {
-      surroundList.push(buttons[clk+row])
+      surroundList.push(buttons[clk+row]);
+      surroundListIndexes.push(clk+row);
       if (buttons[clk+row-1] && Number(buttons[clk+row-1].className)===Number(buttons[clk].className)+1) {
-        surroundList.push(buttons[clk+row-1])
+        surroundList.push(buttons[clk+row-1]);
+        surroundListIndexes.push(clk+row-1);
       }
       if (buttons[clk+row+1] && Number(buttons[clk+row+1].className)===Number(buttons[clk].className)+1) {
-        surroundList.push(buttons[clk+row+1])
+        surroundList.push(buttons[clk+row+1]);
+        surroundListIndexes.push(clk+row+1);
       }
     }
 
-    return surroundList;
+    return [surroundList,surroundListIndexes];
     
   }
   });
