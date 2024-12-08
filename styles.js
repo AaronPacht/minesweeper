@@ -13,6 +13,7 @@ document.addEventListener('DOMContentLoaded',(e)=>{
   });
   
   square.addEventListener('click',()=>{
+  let newGame = true;
   while (table.firstChild) {
       table.removeChild(table.firstChild);
   }
@@ -49,8 +50,28 @@ document.addEventListener('DOMContentLoaded',(e)=>{
 
   for (let i = 0; i < buttons.length; i++) {
     buttons[i].addEventListener('click',()=>{
+      if (newGame) {
+        setMines(i);
+        newGame = false;
+      }
       surround(i,num1);
     });
+  };
+
+  function setMines (cur) {
+    let mineCount = Math.floor(buttons.length/5);
+    let tileTotal = buttons.length - 1;
+    for (let i = 0; i < buttons.length; i++) {
+      if (i!=cur) {
+        if (Math.floor(Math.random() * tileTotal) + 1 <= mineCount) {
+          buttons[i].style.backgroundColor = "red";
+          mineCount-=1;
+          tileTotal-=1;        
+        } else {
+          tileTotal-=1;
+        }; 
+      }
+    };
   };
 
   function surround (clk,row) {
