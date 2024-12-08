@@ -48,22 +48,33 @@ document.addEventListener('DOMContentLoaded',(e)=>{
       buttons.push(newButton)
   }
 
+  let minesLeft;
   for (let i = 0; i < buttons.length; i++) {
     buttons[i].addEventListener('click',()=>{
       if (newGame) {
-        setMines(i);
+        minesLeft = setMines(i);
         newGame = false;
       }
-      surround(i,num1);
+      let mineNumber = 0;
+      let surrounding = surround(i,num1);
+      surrounding.forEach(tile=>{
+        if (minesLeft.includes(tile)) {
+          mineNumber+=1;
+        }
+      });
+      buttons[i].textContent = mineNumber;
+      
     });
   };
 
   function setMines (cur) {
+    let mineList = [];
     let mineCount = Math.floor(buttons.length/5);
     let tileTotal = buttons.length - 1;
     for (let i = 0; i < buttons.length; i++) {
       if (i!=cur) {
         if (Math.floor(Math.random() * tileTotal) + 1 <= mineCount) {
+          mineList.push(buttons[i]);
           buttons[i].style.backgroundColor = "red";
           mineCount-=1;
           tileTotal-=1;        
@@ -72,6 +83,7 @@ document.addEventListener('DOMContentLoaded',(e)=>{
         }; 
       }
     };
+    return mineList;
   };
 
   function surround (clk,row) {
@@ -105,7 +117,7 @@ document.addEventListener('DOMContentLoaded',(e)=>{
       }
     }
 
-    console.log(surroundList);
+    return surroundList;
     
   }
   });
