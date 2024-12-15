@@ -14,6 +14,7 @@ document.addEventListener('DOMContentLoaded',(e)=>{
   
   square.addEventListener('click',()=>{
   let newGame = true;
+  let gameLost = false;
   while (table.firstChild) {
       table.removeChild(table.firstChild);
   }
@@ -53,24 +54,38 @@ document.addEventListener('DOMContentLoaded',(e)=>{
   let minesLeft;
   for (let i = 0; i < buttons.length; i++) {
     buttons[i].addEventListener('click',()=>{
-      if (newGame) {
-        getMines(i,num1);
-      } else if(buttons[i].disabled === false){
-        let next = getNumber(i);
-        if(next){
-          for (let index = 0; index < next.length; index++) {
-            let more = getNumber(next[index]);
-            if (more) {
-              more.forEach(e=>{
-                if (!next.includes(e)) {
-                  next.push(e);
-                }
-              });
-            }
+      if (!gameLost) {
+        if (newGame) {
+          getMines(i,num1);
+        } else if(minesLeft.includes(buttons[i])){
+          mined();
+        } else if(buttons[i].disabled === false){
+          let next = getNumber(i);
+          if(next){
+            for (let index = 0; index < next.length; index++) {
+              let more = getNumber(next[index]);
+              if (more) {
+                more.forEach(e=>{
+                  if (!next.includes(e)) {
+                    next.push(e);
+                  }
+                });
+              }
+            };
           };
         };
-        };
+      };
     });
+  };
+
+  function mined(){
+    minesLeft.forEach(e=>{
+      e.style.backgroundColor='red';
+    });
+    buttons.forEach(e=>{
+      e.disabled = true;
+    });
+    gameLost = true;
   };
 
   function getNumber(i){
@@ -116,7 +131,7 @@ document.addEventListener('DOMContentLoaded',(e)=>{
       };
       newGame = false;
       minesLeft.forEach(e=>{
-        e.style.backgroundColor='red'
+        e.style.backgroundColor='green'
       });
   };
 
