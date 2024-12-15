@@ -95,17 +95,29 @@ document.addEventListener('DOMContentLoaded',(e)=>{
       while (mineNumber!=0) {
         minesLeft = setMines(i);
         mineNumber = 0;
-        let surrounding = surround(i,num1);
+        var [surrounding,next] = surround(i,num1);
         surrounding.forEach(tile=>{
           if (minesLeft.includes(tile)) {
             mineNumber+=1;
           }
         });
-      }
+      };
+      if(next){
+        for (let index = 0; index < next.length; index++) {
+          let more = getNumber(next[index]);
+          if (more) {
+            more.forEach(e=>{
+              if (!next.includes(e)) {
+                next.push(e);
+              }
+            });
+          }
+        };
+      };
       newGame = false;
       minesLeft.forEach(e=>{
         e.style.backgroundColor='red'
-      })
+      });
   };
 
   function setMines (cur) {
