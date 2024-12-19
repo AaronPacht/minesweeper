@@ -59,7 +59,7 @@ document.addEventListener('DOMContentLoaded',(e)=>{
           getMines(i,num1);
         } else if(minesLeft.includes(buttons[i])){
           mined();
-        } else if(buttons[i].disabled === false){
+        } else if(buttons[i].style.backgroundColor != "gray"){
           let next = getNumber(i);
           if(next){
             for (let index = 0; index < next.length; index++) {
@@ -89,7 +89,7 @@ document.addEventListener('DOMContentLoaded',(e)=>{
   };
 
   function getNumber(i){
-    buttons[i].disabled = true;
+    buttons[i].style.backgroundColor = "gray";
     let mineNumber = 0;
     let [surrounding,surroundingIndexes] = surround(i,num1);
     surrounding.forEach(tile=>{
@@ -105,7 +105,7 @@ document.addEventListener('DOMContentLoaded',(e)=>{
   };
 
   function getMines (i,num1) {
-      buttons[i].disabled = true;
+    buttons[i].style.backgroundColor = "gray";
       let mineNumber;
       while (mineNumber!=0) {
         minesLeft = setMines(i);
