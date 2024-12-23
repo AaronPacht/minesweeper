@@ -64,21 +64,7 @@ document.addEventListener('DOMContentLoaded',(e)=>{
         } else if(minesLeft.includes(buttons[i])){
           mined();
         } else if(buttons[i].style.backgroundColor != "gray" && !buttons[i].innerHTML){
-          let next = getNumber(i);
-          if(next){
-            for (let index = 0; index < next.length; index++) {
-              if (!buttons[next[index]].innerHTML) {
-                var more = getNumber(next[index]);
-              }
-              if (more) {
-                more.forEach(e=>{
-                  if (!next.includes(e)) {
-                    next.push(e);
-                  }
-                });
-              }
-            };
-          };
+          nextFunc(i);
         };
       };
     });
@@ -97,6 +83,24 @@ document.addEventListener('DOMContentLoaded',(e)=>{
         };
       };
     });
+  };
+
+  function nextFunc(i) {
+    let next = getNumber(i);
+    if(next){
+      for (let index = 0; index < next.length; index++) {
+        if (!buttons[next[index]].innerHTML) {
+          var more = getNumber(next[index]);
+        };
+        if (more) {
+          more.forEach(e=>{
+            if (!next.includes(e)) {
+              next.push(e);
+            };
+          });
+        }
+      };
+    };
   };
 
   function mined(){
@@ -138,20 +142,7 @@ document.addEventListener('DOMContentLoaded',(e)=>{
           }
         });
       };
-      if(next){
-        for (let index = 0; index < next.length; index++) {
-          if (!buttons[next[index]].innerHTML) {
-            var more = getNumber(next[index]);
-          }
-          if (more) {
-            more.forEach(e=>{
-              if (!next.includes(e)) {
-                next.push(e);
-              }
-            });
-          }
-        };
-      };
+      nextFunc(i);
       newGame = false;
       minesLeft.forEach(e=>{
         e.style.backgroundColor='green'
