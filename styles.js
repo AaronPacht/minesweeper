@@ -2,11 +2,14 @@ document.addEventListener('DOMContentLoaded',(e)=>{
 
   let table = document.getElementById("grid");
   let square = document.getElementById("square")
-  let input1= document.getElementById("input1");
-  let input2= document.getElementById("input2");
+  let input1 = document.getElementById("input1");
+  let input2 = document.getElementById("input2");
+  let input3 = document.getElementById("input3");
   
   input1.placeholder=1;
   input2.placeholder=1;
+  input3.placeholder="?";
+  input3.disabled = true;
 
   input1.addEventListener('change',()=>{
     input2.value=input1.value;
@@ -33,7 +36,8 @@ document.addEventListener('DOMContentLoaded',(e)=>{
     num2 = 10;
     input2.value = 10;
   };
-  
+  input3.value = Math.floor(num1*num2/5);
+
   let autos = ""
   for (let index = 0; index < num1; index++) {
       autos+=" auto"
@@ -55,15 +59,17 @@ document.addEventListener('DOMContentLoaded',(e)=>{
   for (let i = 0; i < buttons.length; i++) {
     buttons[i].addEventListener('click',()=>{
       if (!gameLost) {
-        if (newGame) {
+        if (newGame && !buttons[i].innerHTML) {
           getMines(i,num1);
         } else if(minesLeft.includes(buttons[i])){
           mined();
-        } else if(buttons[i].style.backgroundColor != "gray"){
+        } else if(buttons[i].style.backgroundColor != "gray" && !buttons[i].innerHTML){
           let next = getNumber(i);
           if(next){
             for (let index = 0; index < next.length; index++) {
-              let more = getNumber(next[index]);
+              if (!buttons[next[index]].innerHTML) {
+                var more = getNumber(next[index]);
+              }
               if (more) {
                 more.forEach(e=>{
                   if (!next.includes(e)) {
@@ -73,6 +79,21 @@ document.addEventListener('DOMContentLoaded',(e)=>{
               }
             };
           };
+        };
+      };
+    });
+  };
+
+  for (let i = 0; i < buttons.length; i++) {
+    buttons[i].addEventListener('contextmenu',(e)=>{
+      e.preventDefault()
+      if(buttons[i].style.backgroundColor != "gray"){
+        if (!buttons[i].innerHTML && input3.value != 0) {
+          buttons[i].innerHTML = "F";
+          input3.value -= 1;
+        }else if(buttons[i].innerHTML){
+          buttons[i].innerHTML = "";
+          input3.value = Number(input3.value)+1;
         };
       };
     });
@@ -119,7 +140,9 @@ document.addEventListener('DOMContentLoaded',(e)=>{
       };
       if(next){
         for (let index = 0; index < next.length; index++) {
-          let more = getNumber(next[index]);
+          if (!buttons[next[index]].innerHTML) {
+            var more = getNumber(next[index]);
+          }
           if (more) {
             more.forEach(e=>{
               if (!next.includes(e)) {
