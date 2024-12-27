@@ -61,10 +61,12 @@ document.addEventListener('DOMContentLoaded',(e)=>{
       if (!gameLost) {
         if (newGame && !buttons[i].innerHTML) {
           getMines(i,num1);
-        } else if(minesLeft.includes(buttons[i])){
+        } else if(!buttons[i].innerHTML && minesLeft.includes(buttons[i])){
           mined();
         } else if(buttons[i].style.backgroundColor != "gray" && !buttons[i].innerHTML){
           nextFunc(i);
+        } else if(buttons[i].style.backgroundColor === "gray" && buttons[i].innerHTML){
+          clickSurr(i,num1);
         };
       };
     });
@@ -85,11 +87,28 @@ document.addEventListener('DOMContentLoaded',(e)=>{
     });
   };
 
-  function nextFunc(i) {
-    let next = getNumber(i);
+  function clickSurr(i,row) {
+    let flagNumber = 0;
+    let around = surround(i,row)[0];
+    around.forEach(tile=>{
+      if (tile.innerHTML === "F") {
+        flagNumber+=1;
+      };
+    });
+    if (flagNumber === Number(buttons[i].innerHTML)) {
+      nextFunc(i,surround(i,row));
+    }
+  };
+
+  function nextFunc(i,preset) {
+    if (preset) {
+      var next = preset[1];
+    } else {
+      var next = getNumber(i);
+    }
     if(next){
       for (let index = 0; index < next.length; index++) {
-        if (!buttons[next[index]].innerHTML) {
+        if (!buttons[next[index]].innerHTML && !minesLeft.includes(buttons[next[index]])) {
           var more = getNumber(next[index]);
         };
         if (more) {
@@ -101,11 +120,19 @@ document.addEventListener('DOMContentLoaded',(e)=>{
         }
       };
     };
+    if (preset) {
+      preset[0].forEach(e=>{
+        if (minesLeft.includes(e) && e.innerHTML === "") {
+          mined();
+        };
+      });
+    };
   };
 
   function mined(){
     minesLeft.forEach(e=>{
       e.style.backgroundColor='red';
+      e.innerHTML = "";
     });
     buttons.forEach(e=>{
       e.disabled = true;
@@ -135,7 +162,7 @@ document.addEventListener('DOMContentLoaded',(e)=>{
       while (mineNumber!=0) {
         minesLeft = setMines(i);
         mineNumber = 0;
-        var [surrounding,next] = surround(i,num1);
+        let surrounding = surround(i,num1)[0];
         surrounding.forEach(tile=>{
           if (minesLeft.includes(tile)) {
             mineNumber+=1;
