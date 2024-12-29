@@ -27,13 +27,13 @@ document.addEventListener('DOMContentLoaded',(e)=>{
   if (input1.value>10) {
     num1 = input1.value;
   } else {
-    num1 = 10;
+    num1 = 4;
     input1.value = 10;
   };
   if (input2.value>10) {
     num2 = input2.value;
   } else {
-    num2 = 10;
+    num2 = 4;
     input2.value = 10;
   };
   input3.value = Math.floor(num1*num2/5);
@@ -48,6 +48,7 @@ document.addEventListener('DOMContentLoaded',(e)=>{
   for (let index = 0; index < num1*num2; index++) {
       let newButton = document.createElement("button");
       newButton.className = currentClass;
+      newButton.style.backgroundColor = "white";
       if (index+1===num1*currentClass) {
         currentClass+=1;
       };
@@ -56,6 +57,7 @@ document.addEventListener('DOMContentLoaded',(e)=>{
   }
 
   let minesLeft;
+  let spacesLeft = num1*num2-Math.floor(buttons.length/5);
   for (let i = 0; i < buttons.length; i++) {
     buttons[i].addEventListener('click',()=>{
       if (!gameLost) {
@@ -72,6 +74,7 @@ document.addEventListener('DOMContentLoaded',(e)=>{
     });
   };
 
+  let minesLeftNumber = Math.floor(buttons.length/5);
   for (let i = 0; i < buttons.length; i++) {
     buttons[i].addEventListener('contextmenu',(e)=>{
       e.preventDefault()
@@ -79,11 +82,31 @@ document.addEventListener('DOMContentLoaded',(e)=>{
         if (!buttons[i].innerHTML && input3.value != 0) {
           buttons[i].innerHTML = "F";
           input3.value -= 1;
+          if (minesLeft.includes(buttons[i])) {
+            minesLeftNumber -= 1;
+            if (minesLeftNumber === 0) {
+              win();
+            }
+          }
         }else if(buttons[i].innerHTML){
           buttons[i].innerHTML = "";
           input3.value = Number(input3.value)+1;
+          if (minesLeft.includes(buttons[i])) {
+            minesLeftNumber += 1;
+          }
         };
       };
+    });
+  };
+
+  function win() {
+    for (let index = 0; index < buttons.length; index++) {
+      if (buttons[index].style.backgroundColor === "white") {
+        getNumber(index);
+      };
+    };
+    minesLeft.forEach(e=>{
+      e.innerHTML = "F";
     });
   };
 
@@ -141,7 +164,13 @@ document.addEventListener('DOMContentLoaded',(e)=>{
   };
 
   function getNumber(i){
+    if (buttons[i].style.backgroundColor != "gray") {
+      spacesLeft -= 1;
+    };
     buttons[i].style.backgroundColor = "gray";
+    if (spacesLeft === 0) {
+      win();
+    };
     let mineNumber = 0;
     let [surrounding,surroundingIndexes] = surround(i,num1);
     surrounding.forEach(tile=>{
@@ -157,23 +186,22 @@ document.addEventListener('DOMContentLoaded',(e)=>{
   };
 
   function getMines (i,num1) {
-    buttons[i].style.backgroundColor = "gray";
-      let mineNumber;
-      while (mineNumber!=0) {
-        minesLeft = setMines(i);
-        mineNumber = 0;
-        let surrounding = surround(i,num1)[0];
-        surrounding.forEach(tile=>{
-          if (minesLeft.includes(tile)) {
-            mineNumber+=1;
-          }
-        });
-      };
-      nextFunc(i);
-      newGame = false;
-      minesLeft.forEach(e=>{
-        e.style.backgroundColor='green'
+    let mineNumber;
+    while (mineNumber!=0) {
+      minesLeft = setMines(i);
+      mineNumber = 0;
+      let surrounding = surround(i,num1)[0];
+      surrounding.forEach(tile=>{
+        if (minesLeft.includes(tile)) {
+          mineNumber+=1;
+        }
       });
+    };
+    nextFunc(i);
+    newGame = false;
+    minesLeft.forEach(e=>{
+      e.style.backgroundColor='green'
+    });
   };
 
   function setMines (cur) {
