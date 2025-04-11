@@ -27,13 +27,13 @@ document.addEventListener('DOMContentLoaded',(e)=>{
   if (input1.value>10) {
     num1 = input1.value;
   } else {
-    num1 = 4;
+    num1 = 10;
     input1.value = 10;
   };
   if (input2.value>10) {
     num2 = input2.value;
   } else {
-    num2 = 4;
+    num2 = 10;
     input2.value = 10;
   };
   input3.value = Math.floor(num1*num2/5);
@@ -48,7 +48,7 @@ document.addEventListener('DOMContentLoaded',(e)=>{
   for (let index = 0; index < num1*num2; index++) {
       let newButton = document.createElement("button");
       newButton.className = currentClass;
-      newButton.style.backgroundColor = "white";
+      newButton.style.backgroundColor = "rgb(201, 200, 200)";
       if (index+1===num1*currentClass) {
         currentClass+=1;
       };
@@ -186,17 +186,7 @@ document.addEventListener('DOMContentLoaded',(e)=>{
   };
 
   function getMines (i,num1) {
-    let mineNumber;
-    while (mineNumber!=0) {
-      minesLeft = setMines(i);
-      mineNumber = 0;
-      let surrounding = surround(i,num1)[0];
-      surrounding.forEach(tile=>{
-        if (minesLeft.includes(tile)) {
-          mineNumber+=1;
-        }
-      });
-    };
+    minesLeft = setMines(i,num1);
     nextFunc(i);
     newGame = false;
     minesLeft.forEach(e=>{
@@ -204,21 +194,22 @@ document.addEventListener('DOMContentLoaded',(e)=>{
     });
   };
 
-  function setMines (cur) {
+  function setMines (cur,row) {
     let mineList = [];
     let mineCount = Math.floor(buttons.length/5);
-    let tileTotal = buttons.length - 1;
-    for (let i = 0; i < buttons.length; i++) {
-      if (i!=cur) {
-        if (Math.floor(Math.random() * tileTotal) + 1 <= mineCount) {
-          mineList.push(buttons[i]);
-          mineCount-=1;
-          tileTotal-=1;        
-        } else {
-          tileTotal-=1;
-        }; 
-      }
-    };
+    let surrounding = surround(cur,row)[1];
+    let tileTotal = buttons.length - 1 - surrounding.length;
+      for (let i = 0; i < buttons.length; i++) {
+        if (i!=cur && !surrounding.includes(i) && !mineList.includes(buttons[i])) {
+          if (Math.floor(Math.random() * tileTotal) + 1 <= mineCount) {
+            mineList.push(buttons[i]);
+            mineCount-=1;
+            tileTotal-=1;        
+          } else {
+            tileTotal-=1;
+          }; 
+        }
+      };
     return mineList;
   };
 

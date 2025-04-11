@@ -9,8 +9,10 @@ input{
 }
   
 button{
-    height: 50px;
-    width: 50px;
+    height: 25px;
+    width: 25px;
+    border: solid .25px rgb(129, 129, 129);
+    
   }
   
 #grid{
