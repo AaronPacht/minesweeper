@@ -6,8 +6,8 @@ document.addEventListener('DOMContentLoaded',(e)=>{
   let input2 = document.getElementById("input2");
   let input3 = document.getElementById("input3");
   
-  input1.value=5;
-  input2.value=5;
+  input1.value=10;
+  input2.value=10;
   input3.placeholder="?";
   input3.disabled = true;
 
@@ -15,9 +15,10 @@ document.addEventListener('DOMContentLoaded',(e)=>{
     input2.value=input1.value;
   });
   
+  square.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 24 24" fill="none" stroke="black" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="feather feather-smile"><circle cx="12" cy="12" r="10"></circle><path d="M8 14s1.5 2 4 2 4-2 4-2"></path><line x1="9" y1="9" x2="9.01" y2="9"></line><line x1="15" y1="9" x2="15.01" y2="9"></line></svg>`
   square.addEventListener('click',()=>{
+  square.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 24 24" fill="none" stroke="black" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="feather feather-smile"><circle cx="12" cy="12" r="10"></circle><path d="M8 14s1.5 2 4 2 4-2 4-2"></path><line x1="9" y1="9" x2="9.01" y2="9"></line><line x1="15" y1="9" x2="15.01" y2="9"></line></svg>`
   let newGame = true;
-  let gameLost = false;
   while (table.firstChild) {
       table.removeChild(table.firstChild);
   }
@@ -60,7 +61,7 @@ document.addEventListener('DOMContentLoaded',(e)=>{
   let spacesLeft = num1*num2-Math.floor(buttons.length/5);
   for (let i = 0; i < buttons.length; i++) {
     buttons[i].addEventListener('click',()=>{
-      if (!gameLost) {
+      if (square.innerHTML === `<svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 24 24" fill="none" stroke="black" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="feather feather-smile"><circle cx="12" cy="12" r="10"></circle><path d="M8 14s1.5 2 4 2 4-2 4-2"></path><line x1="9" y1="9" x2="9.01" y2="9"></line><line x1="15" y1="9" x2="15.01" y2="9"></line></svg>`) {
         if (newGame && !buttons[i].innerHTML) {
           getMines(i,num1);
         } else if(!buttons[i].innerHTML && minesLeft.includes(buttons[i])){
@@ -101,7 +102,7 @@ document.addEventListener('DOMContentLoaded',(e)=>{
 
   function win() {
     for (let index = 0; index < buttons.length; index++) {
-      if (buttons[index].style.backgroundColor === "white") {
+      if (buttons[index].style.backgroundColor === "rgb(201, 200, 200)") {
         getNumber(index);
       };
     };
@@ -164,7 +165,7 @@ document.addEventListener('DOMContentLoaded',(e)=>{
     buttons.forEach(e=>{
       e.disabled = true;
     });
-    gameLost = true;
+    square.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 24 24" fill="none" stroke="black" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="feather feather-frown"><circle cx="12" cy="12" r="10"></circle><path d="M16 16s-1.5-2-4-2-4 2-4 2"></path><line x1="9" y1="9" x2="9.01" y2="9"></line><line x1="15" y1="9" x2="15.01" y2="9"></line></svg>`;
   };
 
   function getNumber(i){
