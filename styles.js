@@ -155,7 +155,11 @@ document.addEventListener('DOMContentLoaded',(e)=>{
   function mined(){
     minesLeft.forEach(e=>{
       e.style.backgroundColor='red';
-      e.innerHTML = "";
+      if (e.innerHTML === `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="4 0 27 24" overflow="visible" fill="none" stroke="red" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="feather feather-flag"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"></path><line x1="4" y1="22" x2="4" y2="15"></line></svg>`) {
+        e.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="4 0 27 24" overflow="visible" fill="none" stroke="black" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="feather feather-flag"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"></path><line x1="4" y1="22" x2="4" y2="15"></line></svg>`
+      }else{
+      e.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="4.5 0 26.5 24" overflow="visible" fill="none" stroke="black" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="feather feather-x-circle"><circle cx="12" cy="12" r="10"></circle><line x1="15" y1="9" x2="9" y2="15"></line><line x1="9" y1="9" x2="15" y2="15"></line></svg>`;
+      };
     });
     buttons.forEach(e=>{
       e.disabled = true;
@@ -189,9 +193,6 @@ document.addEventListener('DOMContentLoaded',(e)=>{
     minesLeft = setMines(i,num1);
     nextFunc(i);
     newGame = false;
-    minesLeft.forEach(e=>{
-      e.style.backgroundColor='green'
-    });
   };
 
   function setMines (cur,row) {
