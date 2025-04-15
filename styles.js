@@ -6,8 +6,8 @@ document.addEventListener('DOMContentLoaded',(e)=>{
   let input2 = document.getElementById("input2");
   let input3 = document.getElementById("input3");
   
-  input1.placeholder=1;
-  input2.placeholder=1;
+  input1.value=5;
+  input2.value=5;
   input3.placeholder="?";
   input3.disabled = true;
 
@@ -25,13 +25,13 @@ document.addEventListener('DOMContentLoaded',(e)=>{
   let num1
   let num2
   if (input1.value>10) {
-    num1 = input1.value;
+    num1 = Number(input1.value);
   } else {
     num1 = 10;
     input1.value = 10;
   };
   if (input2.value>10) {
-    num2 = input2.value;
+    num2 = Number(input2.value);
   } else {
     num2 = 10;
     input2.value = 10;
