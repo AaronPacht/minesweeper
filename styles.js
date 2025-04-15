@@ -80,9 +80,9 @@ document.addEventListener('DOMContentLoaded',(e)=>{
       e.preventDefault()
       if(buttons[i].style.backgroundColor != "gray"){
         if (!buttons[i].innerHTML && input3.value != 0) {
-          buttons[i].innerHTML = "F";
+          buttons[i].innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="4 0 27 24" overflow="visible" fill="none" stroke="red" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="feather feather-flag"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"></path><line x1="4" y1="22" x2="4" y2="15"></line></svg>`;
           input3.value -= 1;
-          if (minesLeft.includes(buttons[i])) {
+          if (minesLeft && minesLeft.includes(buttons[i])) {
             minesLeftNumber -= 1;
             if (minesLeftNumber === 0) {
               win();
@@ -91,7 +91,7 @@ document.addEventListener('DOMContentLoaded',(e)=>{
         }else if(buttons[i].innerHTML){
           buttons[i].innerHTML = "";
           input3.value = Number(input3.value)+1;
-          if (minesLeft.includes(buttons[i])) {
+          if (minesLeft && minesLeft.includes(buttons[i])) {
             minesLeftNumber += 1;
           }
         };
@@ -106,7 +106,7 @@ document.addEventListener('DOMContentLoaded',(e)=>{
       };
     };
     minesLeft.forEach(e=>{
-      e.innerHTML = "F";
+      e.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="4 0 27 24" overflow="visible" fill="none" stroke="red" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="feather feather-flag"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"></path><line x1="4" y1="22" x2="4" y2="15"></line></svg>`;
     });
   };
 
@@ -114,7 +114,7 @@ document.addEventListener('DOMContentLoaded',(e)=>{
     let flagNumber = 0;
     let around = surround(i,row)[0];
     around.forEach(tile=>{
-      if (tile.innerHTML === "F") {
+      if (tile.innerHTML === `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="4 0 27 24" overflow="visible" fill="none" stroke="red" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="feather feather-flag"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"></path><line x1="4" y1="22" x2="4" y2="15"></line></svg>`) {
         flagNumber+=1;
       };
     });
